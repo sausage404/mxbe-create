@@ -20,6 +20,10 @@ To use this package, you can run the following command:
 npm create mxbe
 ```
 
+#### Options
+
+- `--skip` or `-s` - Skip the installation of @mxbe/cli
+
 This will create a new extension in the current directory.
 
 ## Commands
