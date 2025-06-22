@@ -21,7 +21,7 @@ export default async (projectPath: string, simple: SimpleResponse) => {
             min_engine_version: simple.minimumEngineVersion.split('.').map(Number)
         },
         metadata: {
-            author: simple.authorName.split(',').map(author => author.trim())
+            authors: simple.authorName.split(',').map(author => author.trim())
         }
     }
 
@@ -50,7 +50,7 @@ export default async (projectPath: string, simple: SimpleResponse) => {
                 {
                     type: 'script',
                     language: 'javascript',
-                    uuid: '',
+                    uuid: v4(),
                     entry: 'scripts/bundle.js',
                     version: [1, 0, 0]
                 }

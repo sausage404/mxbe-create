@@ -27,7 +27,7 @@ export default async (projectPath: string, simple: SimpleResponse) => {
             }
         ],
         metadata: {
-            author: simple.authorName.split(',').map(author => author.trim())
+            authors: simple.authorName.split(',').map(author => author.trim())
         }
     }, { spaces: 2 });
     console.log([
