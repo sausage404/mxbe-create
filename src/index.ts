@@ -8,7 +8,7 @@ import inquirer from "inquirer";
 export default async (skip: boolean) => {
     if (!skip) {
         console.log("Installing @mxbe/cli globally...");
-        console.log("If next time you want to use this package, you can run 'npm create-mxbe -s' to skip this step.");
+        console.log("If next time you want to use this package, you can run 'npm create mxbe -s' to skip this step.");
         execSync("npm install -g @mxbe/cli", { stdio: 'ignore' });
     }
     const extension = await selectExtension();
