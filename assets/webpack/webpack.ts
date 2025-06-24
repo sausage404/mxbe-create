@@ -18,8 +18,6 @@ module.exports = {
     },
     externals: common.pkg.modules.map(module => ({
         [module]: module
-    })).map(module => ({
-        [module]: module
     })),
     module: {
         rules: [
