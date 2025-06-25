@@ -3,7 +3,7 @@ import path from "path";
 import { v4 } from "uuid";
 import { SimpleResponse } from "../prompt";
 
-export default async (projectPath: string, simple: SimpleResponse) => {
+export default async (projectPath: string, simple: SimpleResponse, uuid: string | null) => {
     const resourcePath = path.join(projectPath, 'resource');
     await fs.ensureDir(resourcePath);
     await fs.ensureDir(path.join(resourcePath, 'textures'));
@@ -16,13 +16,13 @@ export default async (projectPath: string, simple: SimpleResponse) => {
         header: {
             name: simple.projectName,
             description: simple.projectDescription,
-            uuid: v4(),
+            uuid: uuid ?? v4(),
             version: [1, 0, 0],
             min_engine_version: simple.minimumEngineVersion.split('.').map(Number)
         },
         modules: [
             {
-                type: "resource",
+                type: "resources",
                 uuid: v4(),
                 version: [1, 0, 0],
             }

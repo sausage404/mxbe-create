@@ -7,6 +7,7 @@ import { execSync } from "child_process";
 import { inputSimple, selectExtension } from "./prompt";
 import constant from "./constant";
 import cliProgress from "cli-progress";
+import { v4 } from "uuid";
 
 export default async (skip: boolean) => {
     if (!skip) {
@@ -19,8 +20,10 @@ export default async (skip: boolean) => {
 
     const projectPath = path.resolve(process.cwd(), simple.projectName);
 
-    extension.includes("behavior") && await behavior(projectPath, simple);
-    extension.includes("resource") && await resource(projectPath, simple);
+    const uuid = extension.includes("resource") ? v4() : null;
+
+    extension.includes("behavior") && await behavior(projectPath, simple, uuid);
+    extension.includes("resource") && await resource(projectPath, simple, uuid);
 
     if (!(await fs.exists(path.join(projectPath, "package.json")))) {
         await fs.writeJSON(path.join(projectPath, "package.json"), {

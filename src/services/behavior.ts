@@ -7,7 +7,7 @@ import constant from "../constant";
 import { execSync } from "child_process";
 import cliProgress from "cli-progress";
 
-export default async (projectPath: string, simple: SimpleResponse) => {
+export default async (projectPath: string, simple: SimpleResponse, uuid: string | null) => {
 
     const api = await confirmAPI();
 
@@ -62,12 +62,18 @@ export default async (projectPath: string, simple: SimpleResponse) => {
                     version: [1, 0, 0]
                 }
             ],
-            dependencies: Object.entries(dependencies)
-                .filter(([name]) => common.pkg.modules.includes(name))
-                .map(([name, version]) => ({
-                    module_name: name,
-                    version: version.includes('beta') ? `${version.split('-')[0]}-beta` : version.split('-')[0],
-                })),
+            dependencies: [
+                ...Object.entries(dependencies)
+                    .filter(([name]) => common.pkg.modules.includes(name))
+                    .map(([name, version]) => ({
+                        module_name: name,
+                        version: version.includes('beta') ? `${version.split('-')[0]}-beta` : version.split('-')[0],
+                    })),
+                (uuid ? {
+                    uuid: uuid,
+                    version: [1, 0, 0]
+                } : {})
+            ],
         }, { spaces: 2 });
         await fs.copy(
             path.join(__dirname, '..', '..', 'assets', 'webpack', `webpack.${isTypeScript ? 'ts' : 'js'}`),
