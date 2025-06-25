@@ -61,11 +61,3 @@ In this package, you can use the following commands:
    ```
 
    This command will update and edit the project configuration.
-
-5. **Import a project**
-
-   ```bash
-   npm run import
-   ```
-
-   This command will import a project to the bds server.
