@@ -6,7 +6,7 @@ module.exports = {
     entry: './src/index',
     target: 'node',
     output: {
-        path: path.resolve(__dirname, 'scripts'),
+        path: path.resolve(__dirname, 'behavior', 'scripts'),
         filename: 'bundle.js',
         module: true,
         library: {

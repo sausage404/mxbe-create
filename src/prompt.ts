@@ -6,9 +6,10 @@ type ExtensionResponse = Promise<"behavior" | "resource">
 export const selectExtension = async (): ExtensionResponse => {
     const { extension } = await inquirer.prompt([
         {
-            type: "select",
+            type: "checkbox",
             name: "extension",
             message: "Select a extension type",
+            validate: input => input.length > 0 || 'Extension type is required',
             choices: [
                 {
                     name: "Behavior Pack",
@@ -87,13 +88,13 @@ type ScriptResponse = {
 export const inputScript = async (): Promise<ScriptResponse> => {
     return await inquirer.prompt([
         {
-            type: 'list',
+            type: 'select',
             name: 'language',
             message: 'Which language do you want to use?',
             choices: ['typescript', 'javascript']
         },
         {
-            type: 'list',
+            type: 'select',
             name: 'version',
             message: 'What game type would you like to use?',
             choices: ['stable', 'preview'],

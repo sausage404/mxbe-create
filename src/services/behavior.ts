@@ -25,25 +25,32 @@ export default async (projectPath: string, simple: SimpleResponse) => {
         }
     }
 
+    const behaviorPath = path.join(projectPath, 'behavior');
+
     if (api) {
         const script = await inputScript();
         const dependencies = await selectDependencyVersion(script.dependencies, script.version);
 
         const isTypeScript = script.language === 'typescript';
 
-        await fs.ensureDir(projectPath);
+        await fs.ensureDir(behaviorPath);
         await fs.copy(
             path.join(__dirname, '..', '..', 'assets', 'pack_icon.png'),
-            path.join(projectPath, 'pack_icon.png')
+            path.join(behaviorPath, 'pack_icon.png')
         );
-        await fs.ensureDir(path.join(projectPath, 'scripts'));
+        await fs.ensureDir(path.join(behaviorPath, 'scripts'));
         await fs.ensureDir(path.join(projectPath, 'src'));
         await fs.writeFile(path.join(projectPath, `/src/index.${isTypeScript ? 'ts' : 'js'}`), '');
         await fs.writeJson(path.join(projectPath, 'package.json'), {
             name: path.basename(projectPath),
-            ...constant.package
+            scripts: {
+                ...constant.package.scripts,
+                build: 'webpack --mode production',
+                dev: 'webpack --mode development --watch',
+                update: 'mxbe update',
+            }
         }, { spaces: 2 });
-        await fs.writeJSON(path.join(projectPath, "manifest.json"), {
+        await fs.writeJSON(path.join(behaviorPath, "manifest.json"), {
             ...manifest,
             capabilities: ['script_eval'],
             modules: [
@@ -106,12 +113,12 @@ export default async (projectPath: string, simple: SimpleResponse) => {
 
         bar.stop();
     } else {
-        await fs.ensureDir(projectPath);
+        await fs.ensureDir(behaviorPath);
         await fs.copy(
             path.join(__dirname, '..', '..', 'assets', 'pack_icon.png'),
-            path.join(projectPath, 'pack_icon.png')
+            path.join(behaviorPath, 'pack_icon.png')
         );
-        await fs.writeJSON(path.join(projectPath, "manifest.json"), {
+        await fs.writeJSON(path.join(behaviorPath, "manifest.json"), {
             ...manifest,
             modules: [
                 {
@@ -122,10 +129,4 @@ export default async (projectPath: string, simple: SimpleResponse) => {
             ],
         }, { spaces: 2 });
     }
-
-    console.log([
-        "Project created successfully.",
-        `Run 'code ${path.basename(projectPath)}' to open the project in Visual Studio Code.`,
-        `Run 'npm run dev' to start the development server.`,
-    ].join('\n'));
 }

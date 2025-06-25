@@ -1,9 +1,12 @@
+import fs from "fs-extra";
 import path from "path";
-import { inputSimple, selectExtension } from "./prompt";
+import common from "@mxbe/common";
 import behavior from "./services/behavior";
 import resource from "./services/resource";
 import { execSync } from "child_process";
-import inquirer from "inquirer";
+import { inputSimple, selectExtension } from "./prompt";
+import constant from "./constant";
+import cliProgress from "cli-progress";
 
 export default async (skip: boolean) => {
     if (!skip) {
@@ -14,13 +17,50 @@ export default async (skip: boolean) => {
     const extension = await selectExtension();
     const simple = await inputSimple();
 
-    const projectFolder = `${simple.projectName}-${extension === "behavior" ? "bp" : "rp"}`;
-    const projectPath = path.resolve(process.cwd(), projectFolder);
+    const projectPath = path.resolve(process.cwd(), simple.projectName);
 
+    extension.includes("behavior") && await behavior(projectPath, simple);
+    extension.includes("resource") && await resource(projectPath, simple);
 
-    if (extension === "behavior") {
-        await behavior(projectPath, simple);
-    } else {
-        await resource(projectPath, simple);
+    if (!(await fs.exists(path.join(projectPath, "package.json")))) {
+        await fs.writeJSON(path.join(projectPath, "package.json"), {
+            name: path.basename(projectPath),
+            ...constant.package
+        }, { spaces: 2 });
+        const bar = new cliProgress.SingleBar({
+            format: 'Installing [{bar}] {percentage}% | {value}/{total} | {module}',
+            barCompleteChar: '█',
+            barIncompleteChar: '░',
+            hideCursor: true
+        }, cliProgress.Presets.shades_classic);
+
+        bar.start(common.pkg.compiler.length + 1, 0, { module: '' });
+
+        bar.increment();
+
+        for (const module of common.pkg.compiler) {
+            bar.update({ module });
+
+            try {
+                execSync(`npm install -D ${module} --legacy-peer-deps`, { cwd: projectPath, stdio: 'ignore' });
+            } catch (err: any) {
+                bar.stop();
+                console.error(`Failed to install ${module}`);
+                console.error(err.message);
+                process.exit(1);
+            }
+
+            bar.increment();
+        }
+
+        bar.stop();
     }
+
+    await fs.writeFile(path.join(projectPath, "README.md"), constant.readme);
+    await fs.writeFile(path.join(projectPath, ".gitignore"), constant.gitignore);
+
+    console.log([
+        `Successfully created project ${simple.projectName}`,
+        `Run 'code ${projectPath}' to open the project in Visual Studio Code`,
+    ].join("\n"));
 }

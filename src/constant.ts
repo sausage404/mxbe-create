@@ -1,3 +1,6 @@
+import fs from "fs-extra";
+import path from "path";
+
 export default {
     tsconfig: {
         compilerOptions: {
@@ -17,12 +20,11 @@ export default {
     },
     package: {
         scripts: {
-            build: 'webpack --mode production',
-            dev: 'webpack --mode development --watch',
-            zip: 'mxbe compile --zip --rebuild',
+            zip: 'mxbe compile --rebuild',
             mcpack: 'mxbe compile --mcpack --rebuild',
-            update: 'mxbe update',
-            import: 'mxbe import -b'
+            link: 'mxbe link'
         }
-    }
+    },
+    readme: fs.readFileSync(path.join(__dirname, '..', 'assets', 'README.md'), 'utf-8'),
+    gitignore: fs.readFileSync(path.join(__dirname, '..', 'assets', '.gitignore'), 'utf-8')
 }

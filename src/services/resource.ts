@@ -4,13 +4,14 @@ import { v4 } from "uuid";
 import { SimpleResponse } from "../prompt";
 
 export default async (projectPath: string, simple: SimpleResponse) => {
-    await fs.ensureDir(projectPath);
-    await fs.ensureDir(path.join(projectPath, 'textures'));
+    const resourcePath = path.join(projectPath, 'resource');
+    await fs.ensureDir(resourcePath);
+    await fs.ensureDir(path.join(resourcePath, 'textures'));
     await fs.copy(
         path.join(__dirname, '..', '..', 'assets', 'pack_icon.png'),
-        path.join(projectPath, 'pack_icon.png')
+        path.join(resourcePath, 'pack_icon.png')
     );
-    await fs.writeJSON(path.join(projectPath, "manifest.json"), {
+    await fs.writeJSON(path.join(resourcePath, "manifest.json"), {
         format_version: 2,
         header: {
             name: simple.projectName,
@@ -30,8 +31,4 @@ export default async (projectPath: string, simple: SimpleResponse) => {
             authors: simple.authorName.split(',').map(author => author.trim())
         }
     }, { spaces: 2 });
-    console.log([
-        "Project created successfully.",
-        `Run 'code ${path.basename(projectPath)}' to open the project in Visual Studio Code.`
-    ].join('\n'));
 }
