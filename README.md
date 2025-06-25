@@ -30,7 +30,15 @@ This will create a new extension in the current directory.
 
 In this package, you can use the following commands:
 
-1. **Start the production server**
+1. **Link the project to the development folder**
+
+   ```bash
+   npm run link
+   ```
+
+   This command will link the project to the development folder, creating a symlink to the project in the current directory.
+
+2. **Start the production server**
 
    ```bash
    npm run dev
@@ -38,7 +46,7 @@ In this package, you can use the following commands:
 
    This command will start a production server with hot reloading enabled.
 
-2. **Build the project for production**
+3. **Build the project for production**
 
    ```bash
    npm run build
@@ -46,7 +54,7 @@ In this package, you can use the following commands:
 
    This command will build the project for production, creating a minified version of the project.
 
-3. **Compile the project to a zip file**
+4. **Compile the project to a zip file**
 
    ```bash
    npm run zip
@@ -54,7 +62,7 @@ In this package, you can use the following commands:
 
    This command will compile your project, creating a zip file containing all necessary files.
 
-4. **Update the project**
+5. **Update the project**
 
    ```bash
    npm run update
