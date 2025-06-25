@@ -26,5 +26,5 @@ export default {
         }
     },
     readme: fs.readFileSync(path.join(__dirname, '..', 'assets', 'README.md'), 'utf-8'),
-    gitignore: fs.readFileSync(path.join(__dirname, '..', 'assets', '.gitignore'), 'utf-8')
+    gitignore: fs.readFileSync(path.join(__dirname, '..', 'assets', 'git.gitignore'), 'utf-8')
 }
