@@ -46,11 +46,6 @@ jspm_packages/
 *.seed
 *.pid.lock
 
-# Environment files
-.env
-.env.local
-.env.*.local
-
 # Coverage
 coverage/
 
