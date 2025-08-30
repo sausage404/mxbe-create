@@ -61,8 +61,5 @@ coverage/
 *.rar
 *.7z
 
-# npm
-package-lock.json
-
 # GitHub
 .github/

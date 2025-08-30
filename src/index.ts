@@ -61,10 +61,10 @@ export default async (skip: boolean) => {
 
     await fs.writeFile(path.join(projectPath, "README.md"), constant.readme);
     await fs.writeFile(path.join(projectPath, ".gitignore"), constant.gitignore);
-    await fs.writeFile(path.join(projectPath, ".env"), [
-        `BASE_PATH=AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang`,
-        `BEHAVIOR_PATH=development_behavior_packs`,
-        `RESOURCE_PATH=development_resource_packs`
+    await fs.writeFile(path.join(projectPath, "paths.yml"), [
+        "base_path: \"AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang\"",
+        "behavior_path: \"development_behavior_packs\"",
+        "resource_path: \"development_resource_packs\""
     ].join("\n"));
 
     console.log([
